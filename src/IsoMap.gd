@@ -10,11 +10,15 @@ var player: CharacterBody2D
 var tile_offset: Vector2 = Vector2(0, -tile_set.tile_size.y/2)
 var layer_offset: Vector2i = Vector2i(-1, -1)
 
+func _init():
+	y_sort_enabled = true
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in range(1, layers):
 		add_layer(i)
 		set_layer_z_index(i, i)
+		set_layer_y_sort_enabled(i, true)
 		
 	player = get_child(0)
 	draw_chunk(make_chunk)
