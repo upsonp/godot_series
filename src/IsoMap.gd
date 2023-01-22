@@ -23,6 +23,14 @@ func _ready():
 	player.position = map_to_local(chunk_index) + tile_offset
 	player.z_index = 1
 
+func get_valid_cell(cell_index: Vector2i) -> Vector3i:
+	for layer in range(get_layers_count()-1, -1, -1):
+		var cell_test: Vector2i = cell_index + (layer_offset * layer)
+		if get_cell_source_id(layer, cell_test) != -1:
+			return Vector3i(cell_index.x, cell_index.y, layer)
+		
+	return Vector3i(cell_index.x, cell_index.y, -1)
+	
 func draw_chunk(chunk_func: Callable):
 	var chunk = chunk_func.call()
 	
