@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 var map: IsoMap
 
+@export var jumpstrenght: int = 1
 var target_position: Vector2 = Vector2.ZERO
 var target_height: int = -1
 
@@ -34,7 +35,7 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed("ui_jump"):
 		jumping = true
-		
+
 	if direction != Vector2i.ZERO and target_position == Vector2.ZERO:
 		var cur_cell = map.layer_local_to_map(z_index-1, position)
 		var new_cell = cur_cell + direction
@@ -42,7 +43,7 @@ func _physics_process(delta):
 		if valid_cell.z != -1:
 			if valid_cell.z == z_index - 1:
 				target_position = map.vector_height_map_to_local(valid_cell) + map.tile_offset
-			elif jumping and (valid_cell.z <= z_index + 1 and valid_cell.z >= z_index - 2):
+			elif jumping and (valid_cell.z <= (z_index + jumpstrenght - 1) and valid_cell.z >= (z_index - jumpstrenght - 1)):
 				target_position = map.vector_height_map_to_local(valid_cell) + map.tile_offset
 				target_height = valid_cell.z + 1
 				
@@ -69,6 +70,7 @@ func _physics_process(delta):
 			position = target_position
 			if target_height != -1:
 				z_index = target_height
+				map.set_active_layer(z_index - 1)
 				target_height = -1
 			target_position = Vector2.ZERO
 			current_direction = Vector2.ZERO

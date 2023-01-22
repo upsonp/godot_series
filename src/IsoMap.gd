@@ -29,7 +29,18 @@ func _ready():
 	
 	player.position = vector_height_map_to_local(valid)  + tile_offset
 	player.z_index = valid.z + 1
+	set_active_layer(player.z_index - 1)
 
+func set_active_layer(layer: int):
+	var i_colour = Color(0.8, 0.8, 0.8)
+	var a_colour = Color(1.0, 1.0, 1.0)
+	for ilayer in range(get_layers_count()-1, -1, -1):
+		if ilayer != layer:
+			set_layer_modulate(ilayer, i_colour)
+		else:
+			set_layer_modulate(ilayer, a_colour)
+
+	
 func layer_local_to_map(layer: int, local_position: Vector2) -> Vector2i:
 	return local_to_map(local_position - tile_offset) - (layer_offset * layer)
 	
