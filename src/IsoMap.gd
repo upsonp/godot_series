@@ -24,9 +24,18 @@ func _ready():
 	draw_chunk(make_chunk)
 	
 	var chunk_index = Vector2(chunk_size/2, chunk_size/2)
-	player.position = map_to_local(chunk_index) + tile_offset
-	player.z_index = 1
+#	var chunk_index = Vector2(3, 3)
+	var valid: Vector3i = get_valid_cell(chunk_index)
+	
+	player.position = vector_height_map_to_local(valid)  + tile_offset
+	player.z_index = valid.z + 1
 
+func layer_local_to_map(layer: int, local_position: Vector2) -> Vector2i:
+	return local_to_map(local_position - tile_offset) - (layer_offset * layer)
+	
+func vector_height_map_to_local(cell_index: Vector3i) -> Vector2:
+	return map_to_local(Vector2i(cell_index.x, cell_index.y) + (layer_offset * cell_index.z))
+	
 func get_valid_cell(cell_index: Vector2i) -> Vector3i:
 	for layer in range(get_layers_count()-1, -1, -1):
 		var cell_test: Vector2i = cell_index + (layer_offset * layer)
