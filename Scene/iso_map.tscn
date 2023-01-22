@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://chw07mg70x74w"]
+
+[ext_resource type="Texture2D" uid="uid://bhfpj5q1ausgr" path="res://assets/grass_tile_001.png" id="1_1ufa6"]
+[ext_resource type="Script" path="res://src/IsoMap.gd" id="2_rtxnl"]
+[ext_resource type="Script" path="res://src/IsoPlayer.gd" id="3_3fcwk"]
+[ext_resource type="Texture2D" uid="uid://ceuvh4o8d65j0" path="res://assets/Girl.png" id="4_nviet"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kqobp"]
+texture = ExtResource("1_1ufa6")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_6k03i"]
+tile_shape = 1
+tile_layout = 5
+tile_size = Vector2i(32, 16)
+sources/0 = SubResource("TileSetAtlasSource_kqobp")
+
+[node name="IsoMap" type="TileMap"]
+tile_set = SubResource("TileSet_6k03i")
+format = 2
+script = ExtResource("2_rtxnl")
+
+[node name="IsoPlayer" type="CharacterBody2D" parent="."]
+script = ExtResource("3_3fcwk")
+
+[node name="Sprite2D" type="Sprite2D" parent="IsoPlayer"]
+position = Vector2(0, -8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_nviet")
+
+[node name="Camera2D" type="Camera2D" parent="IsoPlayer/Sprite2D"]
+current = true
