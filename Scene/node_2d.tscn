@@ -25,6 +25,7 @@ script = ExtResource("2_q6bup")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="TileMap"]
 script = ExtResource("3_jy4sa")
+jumpstrenght = null
 
 [node name="Sprite2D" type="Sprite2D" parent="TileMap/CharacterBody2D"]
 position = Vector2(0, -8)
