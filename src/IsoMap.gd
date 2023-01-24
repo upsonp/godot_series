@@ -4,6 +4,7 @@ class_name IsoMap
 
 @export var chunk_size: int = 9
 @export var chunks: int = 3
+@export var cache_chunks: int = 5
 @export var layers: int = 4
 
 @export var active_color: Color = Color(1.0, 1.0, 1.0)
@@ -15,6 +16,9 @@ var player: CharacterBody2D
 var tile_offset: Vector2 = Vector2(0, -tile_set.tile_size.y/2)
 var layer_offset: Vector2i = Vector2i(-1, -1)
 
+var chunk_map: Dictionary = Dictionary()
+var cached_chunks: Dictionary = Dictionary()
+
 func _init():
 	y_sort_enabled = true
 	for i in range(1, layers):
@@ -22,12 +26,13 @@ func _init():
 		set_layer_z_index(i, i)
 		set_layer_y_sort_enabled(i, true)
 
-	for x in range(chunks):
-		for y in range(chunks):
-			if x == 0 and y == 0:
-				draw_chunk(make_chunk, Vector2i(x, y))
-			else:
-				draw_chunk(flat_chunk, Vector2i(x, y))
+	update_chunks()
+#	for x in range(chunks):
+#		for y in range(chunks):
+#			if x == 0 and y == 0:
+#				draw_chunk(make_chunk, Vector2i(x, y))
+#			else:
+#				draw_chunk(flat_chunk, Vector2i(x, y))
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -65,7 +70,46 @@ func get_valid_cell(cell_index: Vector2i, max_layer: int = get_layers_count()) -
 			return Vector3i(cell_index.x, cell_index.y, layer)
 		
 	return Vector3i(cell_index.x, cell_index.y, -1)
+
+func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
+	# get new chunks
+	var new_keys: Array = get_new_chunks(chunk_index)
+
+	# cache old chunks
+	cache_unused_chunks(new_keys)
+	# draw chunks
+	for key in chunk_map.keys():
+		draw_chunk(chunk_map[key], key)
 	
+func get_new_chunks(chunk_index: Vector2i) -> Array:
+	var new_keys = Array()
+	for x in range(-chunks * 0.5, ceil(chunks * 0.5)):
+		for y in range(-chunks * 0.5, ceil(chunks * 0.5)):
+			var chunk_key: Vector2i = chunk_index + Vector2i(x, y)
+			var chunk_func: Callable = flat_chunk
+			if cached_chunks.has(chunk_key):
+				chunk_func = cached_chunks[chunk_key]
+				cached_chunks.erase(chunk_key)
+			elif (chunk_key.x % 3 == 0 and chunk_key.y % 3 == 0):
+				chunk_func = make_chunk
+				
+			chunk_map[chunk_key] = chunk_func
+			new_keys.push_back(chunk_key)
+	
+	return new_keys
+	
+func cache_unused_chunks(used_keys: Array):
+	for key in chunk_map.keys():
+		if key not in used_keys:
+			cached_chunks[key] = chunk_map[key]
+			chunk_map.erase(key)
+	
+	# clear chunks
+	if cached_chunks.size() > cache_chunks:
+		for layer in range(get_layers_count()):
+			clear_layer(layer)
+		cached_chunks.clear()
+		
 func draw_chunk(chunk_func: Callable, chunk_index: Vector2i):
 	var chunk = chunk_func.call()
 	var chunk_offset = chunk_index * chunk_size
@@ -89,23 +133,31 @@ func flat_chunk() -> Array[Array]:
 func make_chunk() -> Array[Array]:
 	var chunk = flat_chunk()
 	
-	chunk[3][2] = 1
-	chunk[4][3] = 1
-	chunk[2][3] = 1
-	chunk[3][3] = Array()
-	chunk[3][3].push_back(1)
-	chunk[3][3].push_back(2)
+	var middle_x = chunk_size/2
+	var middle_y = chunk_size/2
+	
+	chunk[middle_x+1][middle_y-1] = 1
+	chunk[middle_x][middle_y-2] = 1
+	chunk[middle_x-1][middle_y-1] = 1
+	chunk[middle_x][middle_y-1] = Array()
+	chunk[middle_x][middle_y-1].push_back(1)
+	chunk[middle_x][middle_y-1].push_back(2)
 
-	chunk[3][4] = Array()
-	chunk[3][4].push_back(0)
-	chunk[3][4].push_back(2)
-	chunk[3][4].push_back(3)
+	chunk[middle_x][middle_y] = Array()
+	chunk[middle_x][middle_y].push_back(0)
+	chunk[middle_x][middle_y].push_back(2)
+	chunk[middle_x][middle_y].push_back(3)
 
-	chunk[2][5] = 1
-	chunk[4][5] = 1
-	chunk[3][6] = 1
-	chunk[3][5] = Array()
-	chunk[3][5].push_back(1)
-	chunk[3][5].push_back(2)
+	chunk[middle_x-1][middle_y+1] = 1
+	chunk[middle_x][middle_y+2] = 1
+	chunk[middle_x+1][middle_y+1] = 1
+	chunk[middle_x][middle_y+1] = Array()
+	chunk[middle_x][middle_y+1].push_back(1)
+	chunk[middle_x][middle_y+1].push_back(2)
 	
 	return chunk
+
+func _process(delta):
+	var cell_index = local_to_map(player.position - tile_offset)
+	var chunk = cell_index / chunk_size
+	update_chunks(chunk)
