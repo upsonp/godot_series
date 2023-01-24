@@ -4,7 +4,7 @@ class_name IsoMap
 
 @export var chunk_size: int = 9
 @export var chunks: int = 3
-@export var cache_chunks: int = 5
+@export var cache_chunks: int = 20
 @export var layers: int = 4
 
 @export var active_color: Color = Color(1.0, 1.0, 1.0)
@@ -27,19 +27,13 @@ func _init():
 		set_layer_y_sort_enabled(i, true)
 
 	update_chunks()
-#	for x in range(chunks):
-#		for y in range(chunks):
-#			if x == 0 and y == 0:
-#				draw_chunk(make_chunk, Vector2i(x, y))
-#			else:
-#				draw_chunk(flat_chunk, Vector2i(x, y))
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 		
 	player = get_child(0)
 	
-	var chunk_index = Vector2(chunk_size/2, chunk_size/2)
+	var chunk_index = Vector2(chunk_size * 0.5, chunk_size * 0.5)
 #	var chunk_index = Vector2(3, 3)
 	var valid: Vector3i = get_valid_cell(chunk_index)
 	
@@ -113,13 +107,16 @@ func cache_unused_chunks(used_keys: Array):
 func draw_chunk(chunk_func: Callable, chunk_index: Vector2i):
 	var chunk = chunk_func.call()
 	var chunk_offset = chunk_index * chunk_size
+	var cell_offset: Vector2i = Vector2i.ZERO
 	for x in range(len(chunk)):
 		for y in range(len(chunk[x])):
 			if typeof(chunk[x][y]) == TYPE_ARRAY:
 				for z in range(len(chunk[x][y])):
-					set_cell(chunk[x][y][z], Vector2i(x, y) + (layer_offset * chunk[x][y][z]) + chunk_offset, 0, Vector2(0, 0), 0)
+					cell_offset = Vector2i(x, y) + (layer_offset * chunk[x][y][z]) + chunk_offset
+					set_cell(chunk[x][y][z], cell_offset, 0, Vector2(0, 0), 0)
 			else:
-				set_cell(chunk[x][y], Vector2i(x, y) + (layer_offset * chunk[x][y]) + chunk_offset, 0, Vector2(0, 0), 0)
+				cell_offset = Vector2i(x, y) + (layer_offset * chunk[x][y]) + chunk_offset
+				set_cell(chunk[x][y], cell_offset, 0, Vector2(0, 0), 0)
 
 func flat_chunk() -> Array[Array]:
 	var chunk: Array = Array()
@@ -133,8 +130,8 @@ func flat_chunk() -> Array[Array]:
 func make_chunk() -> Array[Array]:
 	var chunk = flat_chunk()
 	
-	var middle_x = chunk_size/2
-	var middle_y = chunk_size/2
+	var middle_x = chunk_size * 0.5
+	var middle_y = chunk_size * 0.5
 	
 	chunk[middle_x+1][middle_y-1] = 1
 	chunk[middle_x][middle_y-2] = 1
