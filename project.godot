@@ -9,12 +9,18 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "CollisionShape2D",
+"class": &"AnimationShape2D",
+"language": &"GDScript",
+"path": "res://src/AnimatedBody2D.gd"
+}, {
 "base": "TileMap",
 "class": &"IsoMap",
 "language": &"GDScript",
 "path": "res://src/IsoMap.gd"
 }]
 _global_script_class_icons={
+"AnimationShape2D": "",
 "IsoMap": ""
 }
 

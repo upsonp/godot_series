@@ -21,16 +21,17 @@ var cached_chunks: Dictionary = Dictionary()
 
 func _init():
 	y_sort_enabled = true
+	
+# Called when the node enters the scene tree for the first time.
+func _ready():
+		
 	for i in range(1, layers):
 		add_layer(i)
 		set_layer_z_index(i, i)
 		set_layer_y_sort_enabled(i, true)
 
 	update_chunks()
-	
-# Called when the node enters the scene tree for the first time.
-func _ready():
-		
+
 	player = get_child(0)
 	
 	var chunk_index = Vector2(chunk_size * 0.5, chunk_size * 0.5)
@@ -67,16 +68,18 @@ func get_valid_cell(cell_index: Vector2i, max_layer: int = get_layers_count()) -
 
 func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# get new chunks
-	var new_keys: Array = get_new_chunks(chunk_index)
+	var visible_chunks: Dictionary = get_new_chunks(chunk_index)
 
 	# cache old chunks
-	cache_unused_chunks(new_keys)
-	# draw chunks
-	for key in chunk_map.keys():
-		draw_chunk(chunk_map[key], key)
+	cache_unused_chunks(visible_chunks.keys())
 	
-func get_new_chunks(chunk_index: Vector2i) -> Array:
-	var new_keys = Array()
+	# draw chunks
+	for key in visible_chunks.keys():
+		if key not in chunk_map.keys():
+			draw_chunk(visible_chunks[key], key)
+	
+func get_new_chunks(chunk_index: Vector2i) -> Dictionary:
+	var visible_chunks = Dictionary()
 	for x in range(-chunks * 0.5, ceil(chunks * 0.5)):
 		for y in range(-chunks * 0.5, ceil(chunks * 0.5)):
 			var chunk_key: Vector2i = chunk_index + Vector2i(x, y)
@@ -87,10 +90,9 @@ func get_new_chunks(chunk_index: Vector2i) -> Array:
 			elif (chunk_key.x % 3 == 0 and chunk_key.y % 3 == 0):
 				chunk_func = make_chunk
 				
-			chunk_map[chunk_key] = chunk_func
-			new_keys.push_back(chunk_key)
+			visible_chunks[chunk_key] = chunk_func
 	
-	return new_keys
+	return visible_chunks
 	
 func cache_unused_chunks(used_keys: Array):
 	for key in chunk_map.keys():
@@ -100,9 +102,9 @@ func cache_unused_chunks(used_keys: Array):
 	
 	# clear chunks
 	if cached_chunks.size() > cache_chunks:
-		for layer in range(get_layers_count()):
-			clear_layer(layer)
+		clear()
 		cached_chunks.clear()
+		chunk_map.clear()
 		
 func draw_chunk(chunk_func: Callable, chunk_index: Vector2i):
 	var chunk = chunk_func.call()
@@ -118,17 +120,22 @@ func draw_chunk(chunk_func: Callable, chunk_index: Vector2i):
 				cell_offset = Vector2i(x, y) + (layer_offset * chunk[x][y]) + chunk_offset
 				set_cell(chunk[x][y], cell_offset, 0, Vector2(0, 0), 0)
 
+	chunk_map[chunk_index] = chunk_func
+	
 func flat_chunk() -> Array[Array]:
 	var chunk: Array = Array()
+	chunk.resize(chunk_size)
+	
 	for x in range(chunk_size):
-		chunk.push_back(Array())
-		for y in range(chunk_size):
-			chunk[x].push_back(0)
+		chunk[x] = Array()
+		chunk[x].resize(chunk_size)
+		chunk[x].fill(0)
 	
 	return chunk
 	
 func make_chunk() -> Array[Array]:
-	var chunk = flat_chunk()
+	print("making chunk")
+	var chunk: Array[Array] = flat_chunk()
 	
 	var middle_x = chunk_size * 0.5
 	var middle_y = chunk_size * 0.5
