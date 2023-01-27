@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 var map: IsoMap
+var body: AnimatedBody2d
 
 @export var jumpstrenght: int = 1
 var target_position: Vector2 = Vector2.ZERO
@@ -20,6 +21,7 @@ func _init():
 
 func _ready():
 	map = get_parent()
+	body = $body
 	
 func _physics_process(delta):
 	var direction: Vector2i = Vector2i.ZERO
@@ -52,8 +54,9 @@ func _physics_process(delta):
 
 			jumping = false
 			current_direction = direction
-		
+
 	if target_position:
+		body.walk(delta)
 		var target_direction: Vector2 = position.direction_to(target_position).normalized()
 		var distance: float = position.distance_to(target_position)
 		
@@ -74,5 +77,7 @@ func _physics_process(delta):
 				target_height = -1
 			target_position = Vector2.ZERO
 			current_direction = Vector2.ZERO
+	elif body.current_state != AnimatedBody2d.STATE.IDLING:
+		body.rest(delta)
 			
 	move_and_slide()
