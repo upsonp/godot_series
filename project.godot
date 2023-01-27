@@ -10,7 +10,7 @@ config_version=5
 
 _global_script_classes=[{
 "base": "CollisionShape2D",
-"class": &"AnimationShape2D",
+"class": &"AnimatedBody2d",
 "language": &"GDScript",
 "path": "res://src/AnimatedBody2D.gd"
 }, {
@@ -20,7 +20,7 @@ _global_script_classes=[{
 "path": "res://src/IsoMap.gd"
 }]
 _global_script_class_icons={
-"AnimationShape2D": "",
+"AnimatedBody2d": "",
 "IsoMap": ""
 }
 
@@ -30,6 +30,10 @@ config/name="Godot_Series"
 run/main_scene="res://Scene/node_2d.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/scale=4.0
 
 [input]
 

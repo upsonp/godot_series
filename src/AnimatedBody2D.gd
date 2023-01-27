@@ -1,6 +1,6 @@
 extends CollisionShape2D
 
-class_name AnimationShape2D
+class_name AnimatedBody2d
 
 enum STATE {WALKING, IDLING}
 
@@ -20,7 +20,7 @@ func _ready():
 	arm_b = $arm_back
 	leg_f = $leg_front
 	leg_b = $leg_back
-		
+	
 func walk(delta):
 	current_state = STATE.WALKING
 	var a_rotation = arm_f.rotation + PI/2
@@ -56,3 +56,10 @@ func rest(delta):
 	if stopped:
 		current_rotation = 0.0
 		current_state = STATE.IDLING
+		
+#func _process(delta):
+#	if Input.is_anything_pressed():
+#		current_state = STATE.WALKING
+#		walk(delta)
+#	elif current_state != STATE.IDLING:
+#		rest(delta)
