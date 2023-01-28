@@ -4,7 +4,7 @@ extends Node
 
 var chunk_size: int
 var num_of_visible_chunks: int
-var numb_of_cache_chunks: int
+var num_of_cache_chunks: int
 var chunk_height: int
 
 var map: IsoMap
@@ -18,7 +18,7 @@ func init(map: IsoMap) -> void:
 	self.map = map
 	self.chunk_size = map.chunk_size
 	self.num_of_visible_chunks = map.num_of_visible_chunks
-	self.numb_of_cache_chunks = map.numb_of_cache_chunks
+	self.num_of_cache_chunks = map.num_of_cache_chunks
 	self.chunk_height = map.get_layers_count()
 	
 	null_chunk = get_null_chunk()
@@ -36,7 +36,7 @@ func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# in the cached chunks, if it's unlikely, drop the chunk from the cache
 	# maybe write it to long-term storage to maintain changes the user may
 	# have maded to the chunk
-	if cached_patterens.size() - visible_chunks.size() > numb_of_cache_chunks:
+	if cached_patterens.size() - visible_chunks.size() > num_of_cache_chunks:
 		for chunk_key in cached_patterens.keys():
 			if chunk_key not in visible_chunks.keys():
 				cached_patterens.erase(chunk_key)

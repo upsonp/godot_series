@@ -22,6 +22,7 @@ sources/0 = SubResource("TileSetAtlasSource_kqobp")
 tile_set = SubResource("TileSet_6k03i")
 format = 2
 script = ExtResource("2_q6bup")
+num_of_cache_chunks = 50
 
 [node name="Player" type="CharacterBody2D" parent="IsoMap"]
 script = ExtResource("3_jy4sa")
