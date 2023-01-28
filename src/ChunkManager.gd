@@ -10,7 +10,7 @@ var chunk_height: int
 var map: IsoMap
 
 var chunk_map: Dictionary = Dictionary()
-var cached_patterns: Dictionary = Dictionary()
+var cached_patterens: Dictionary = Dictionary()
 
 var null_chunk: Array[TileMapPattern]
 
@@ -27,7 +27,6 @@ func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# get new chunks
 	var visible_chunks: Dictionary = get_visible_chunks(chunk_index)
 
-	# cache old chunks
 	for chunk_key in chunk_map.keys():
 		if chunk_key not in visible_chunks.keys():
 			map.draw_chunk(get_null_chunk(), chunk_key)
@@ -37,23 +36,23 @@ func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# in the cached chunks, if it's unlikely, drop the chunk from the cache
 	# maybe write it to long-term storage to maintain changes the user may
 	# have maded to the chunk
-	if cached_patterns.size() - visible_chunks.size() > numb_of_cache_chunks:
-		for chunk_key in cached_patterns.keys():
+	if cached_patterens.size() - visible_chunks.size() > numb_of_cache_chunks:
+		for chunk_key in cached_patterens.keys():
 			if chunk_key not in visible_chunks.keys():
-				cached_patterns.erase(chunk_key)
+				cached_patterens.erase(chunk_key)
 				chunk_map.erase(chunk_key)
-	
-	# draw chunks that are left in the visisble chunks array
-	for chunk_key in visible_chunks.keys():
-		if chunk_key not in chunk_map.keys(): 
-			chunk_map[chunk_key] = visible_chunks[chunk_key].call()
-			
-		if chunk_key not in cached_patterns.keys():
-			print("making cached pattern: ", chunk_key)
-			cached_patterns[chunk_key] = construct_tile_map_pattern(chunk_map[chunk_key])
-			
-		map.draw_chunk(cached_patterns[chunk_key], chunk_key)
 
+	# draw chunks
+	for chunk_key in visible_chunks.keys():
+		if chunk_key not in chunk_map.keys():
+			chunk_map[chunk_key] = visible_chunks[chunk_key].call()
+		
+		if chunk_key not in cached_patterens.keys():
+			print("making new TileMapPattern: ", chunk_key)
+			cached_patterens[chunk_key] = construct_tile_map_pattern(chunk_map[chunk_key])
+			
+		map.draw_chunk(cached_patterens[chunk_key], chunk_key)
+			
 func construct_tile_map_pattern(chunk_data: Array[Array]) -> Array[TileMapPattern]:
 	var tile_map_patterens: Array[TileMapPattern] = Array()
 	var layer_size: Vector2i = Vector2i(chunk_size, chunk_size)
@@ -81,8 +80,8 @@ func get_patteren_layers(chunk_data: Array[Array]) -> Array[TileMapPattern]:
 	
 func get_visible_chunks(chunk_index: Vector2i) -> Dictionary:
 	var visible_chunks = Dictionary()
-	for x in range(floor(-num_of_visible_chunks * 0.5), ceil(num_of_visible_chunks * 0.5)):
-		for y in range(floor(-num_of_visible_chunks * 0.5), ceil(num_of_visible_chunks * 0.5)):
+	for x in range(-num_of_visible_chunks * 0.5, ceil(num_of_visible_chunks * 0.5)):
+		for y in range(-num_of_visible_chunks * 0.5, ceil(num_of_visible_chunks * 0.5)):
 			var chunk_key: Vector2i = chunk_index + Vector2i(x, y)
 
 			visible_chunks[chunk_key] = flat_chunk
