@@ -4,7 +4,7 @@ class_name IsoMap
 
 @export var chunk_size: int = 9
 @export var num_of_visible_chunks: int = 3
-@export var numb_of_cache_chunks: int = 20
+@export var num_of_cache_chunks: int = 20
 @export var chunk_height: int = 6
 
 @export var active_color: Color = Color(1.0, 1.0, 1.0)
@@ -68,6 +68,12 @@ func draw_chunk(chunk: Array[TileMapPattern], chunk_index: Vector2i):
 		set_pattern(z, chunk_offset + (layer_offset * z), chunk[z])
 	
 func _process(delta):
-	var cell_index = local_to_map(player.position - tile_offset)
-	var chunk = cell_index / chunk_size
+	# I need to disucss this issue in an update video. Because local_to_map was returning
+	# a Vector2i and that was being divided by chunk_size, also an integer, the results
+	# were causing undeseriable behaviour. When heading in an up or right direction new
+	# chunks would not load until the character reached to last cell of the North and East
+	# visible chunks. To solve this, I'm casting local_to_map as a float vector, and taking the
+	# floor of the cell_index / chunk_size to get a better result.
+	var cell_index: Vector2 = local_to_map(player.position - tile_offset)
+	var chunk: Vector2i = floor(cell_index / chunk_size)
 	chunk_manager.update_chunks(chunk)
