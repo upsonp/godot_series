@@ -37,7 +37,6 @@ func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# in the cached chunks, if it's unlikely, drop the chunk from the cache
 	# maybe write it to long-term storage to maintain changes the user may
 	# have maded to the chunk
-	print("Cached: ", cached_patterns.size() - visible_chunks.size())
 	if cached_patterns.size() - visible_chunks.size() > numb_of_cache_chunks:
 		for chunk_key in cached_patterns.keys():
 			if chunk_key not in visible_chunks.keys():
