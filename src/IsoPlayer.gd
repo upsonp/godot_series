@@ -22,6 +22,10 @@ func _init():
 func _ready():
 	map = get_parent()
 	body = $body
+
+func set_location(location: Vector2, zindex: int) -> void:
+	position = location
+	z_index = zindex
 	
 func _physics_process(delta):
 	var direction: Vector2i = Vector2i.ZERO
@@ -56,7 +60,7 @@ func _physics_process(delta):
 			current_direction = direction
 
 	if target_position:
-		body.walk(delta)
+		body.walk(delta, direction)
 		var target_direction: Vector2 = position.direction_to(target_position).normalized()
 		var distance: float = position.distance_to(target_position)
 		
@@ -77,7 +81,7 @@ func _physics_process(delta):
 				target_height = -1
 			target_position = Vector2.ZERO
 			current_direction = Vector2.ZERO
-	elif body.current_state != AnimatedBody2d.STATE.IDLING:
+	elif body.current_state != AnimatedBody2d.ab_state.idling:
 		body.rest(delta)
 			
 	move_and_slide()

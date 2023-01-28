@@ -14,6 +14,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/AnimatedBody2D.gd"
 }, {
+"base": "Node",
+"class": &"ChunkManager",
+"language": &"GDScript",
+"path": "res://src/ChunkManager.gd"
+}, {
 "base": "TileMap",
 "class": &"IsoMap",
 "language": &"GDScript",
@@ -21,6 +26,7 @@ _global_script_classes=[{
 }]
 _global_script_class_icons={
 "AnimatedBody2d": "",
+"ChunkManager": "",
 "IsoMap": ""
 }
 
@@ -30,10 +36,6 @@ config/name="Godot_Series"
 run/main_scene="res://Scene/node_2d.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
-
-[display]
-
-window/stretch/scale=4.0
 
 [input]
 

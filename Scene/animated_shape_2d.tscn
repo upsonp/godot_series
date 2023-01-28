@@ -1,58 +1,58 @@
-[gd_scene load_steps=6 format=3 uid="uid://bc6xauyr8uc2a"]
+[gd_scene load_steps=6 format=3 uid="uid://dld4p44jmgnqe"]
 
-[ext_resource type="Script" path="res://src/AnimatedBody2D.gd" id="1_nph2w"]
-[ext_resource type="Texture2D" uid="uid://bvwk7qsax36if" path="res://assets/alice_arm.png" id="2_lroj1"]
-[ext_resource type="Texture2D" uid="uid://c17f186q81upt" path="res://assets/alice_leg.png" id="3_gxrbk"]
-[ext_resource type="Texture2D" uid="uid://bq5ur1eqm3ky1" path="res://assets/alice_body.png" id="4_4neru"]
+[ext_resource type="Script" path="res://src/AnimatedBody2D.gd" id="1_p5481"]
+[ext_resource type="Texture2D" uid="uid://bvwk7qsax36if" path="res://assets/alice_arm.png" id="2_bev8j"]
+[ext_resource type="Texture2D" uid="uid://c17f186q81upt" path="res://assets/alice_leg.png" id="3_kiq1v"]
+[ext_resource type="Texture2D" uid="uid://bq5ur1eqm3ky1" path="res://assets/alice_body.png" id="4_38al1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n6vlo"]
 radius = 5.0
 height = 14.0
 
-[node name="CollisionShape2D" type="CollisionShape2D"]
+[node name="Body" type="CollisionShape2D"]
 position = Vector2(0, -2)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_n6vlo")
-script = ExtResource("1_nph2w")
+script = ExtResource("1_p5481")
 
-[node name="arm_back" type="Marker2D" parent="."]
+[node name="arm_right" type="Marker2D" parent="."]
 position = Vector2(-15, 1)
 rotation = -1.5708
 
-[node name="Sprite2D" type="Sprite2D" parent="arm_back"]
+[node name="Sprite2D" type="Sprite2D" parent="arm_right"]
 texture_filter = 3
 position = Vector2(0, 3)
-texture = ExtResource("2_lroj1")
+texture = ExtResource("2_bev8j")
 
-[node name="leg_back" type="Marker2D" parent="."]
+[node name="leg_right" type="Marker2D" parent="."]
 position = Vector2(-8, 2)
 rotation = -1.5708
 
-[node name="Sprite2D" type="Sprite2D" parent="leg_back"]
+[node name="Sprite2D" type="Sprite2D" parent="leg_right"]
 texture_filter = 3
 position = Vector2(-1, 4)
-texture = ExtResource("3_gxrbk")
+texture = ExtResource("3_kiq1v")
 
-[node name="leg_front" type="Marker2D" parent="."]
+[node name="leg_left" type="Marker2D" parent="."]
 position = Vector2(-7, -1)
 rotation = -1.5708
 
-[node name="Sprite2D" type="Sprite2D" parent="leg_front"]
+[node name="Sprite2D" type="Sprite2D" parent="leg_left"]
 texture_filter = 3
 position = Vector2(-1, 4)
-texture = ExtResource("3_gxrbk")
+texture = ExtResource("3_kiq1v")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="body" type="Sprite2D" parent="."]
 texture_filter = 3
 position = Vector2(-16, -2)
 rotation = -1.5708
-texture = ExtResource("4_4neru")
+texture = ExtResource("4_38al1")
 
-[node name="arm_front" type="Marker2D" parent="."]
+[node name="arm_left" type="Marker2D" parent="."]
 position = Vector2(-14, -3)
 rotation = -1.5708
 
-[node name="Sprite2D" type="Sprite2D" parent="arm_front"]
+[node name="Sprite2D" type="Sprite2D" parent="arm_left"]
 texture_filter = 3
 position = Vector2(0, 3)
-texture = ExtResource("2_lroj1")
+texture = ExtResource("2_bev8j")

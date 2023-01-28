@@ -18,17 +18,16 @@ sources/0 = SubResource("TileSetAtlasSource_kqobp")
 
 [node name="Node2D" type="Node2D"]
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="IsoMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_6k03i")
 format = 2
 script = ExtResource("2_q6bup")
-layers = 6
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="TileMap"]
+[node name="Player" type="CharacterBody2D" parent="IsoMap"]
 script = ExtResource("3_jy4sa")
 
-[node name="body" parent="TileMap/CharacterBody2D" instance=ExtResource("4_t312q")]
+[node name="body" parent="IsoMap/Player" instance=ExtResource("4_t312q")]
 scale = Vector2(0.75, 0.75)
 
-[node name="Camera2D" type="Camera2D" parent="TileMap/CharacterBody2D"]
+[node name="Camera2D" type="Camera2D" parent="IsoMap/Player"]
 current = true
