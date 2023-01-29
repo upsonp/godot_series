@@ -2,6 +2,8 @@ extends TileMap
 
 class_name IsoMap
 
+@export var map_seed: int = 255
+
 @export var chunk_size: int = 9
 @export var num_of_visible_chunks: int = 3
 @export var num_of_cache_chunks: int = 20
@@ -13,14 +15,20 @@ class_name IsoMap
 
 @onready var player: CharacterBody2D = $Player
 
-var tile_offset: Vector2 = Vector2(0, -tile_set.tile_size.y/2)
+var noise_generator: FastNoiseLite
+
+var tile_offset: Vector2 = Vector2(0, -float(tile_set.tile_size.y) * 0.5)
 var layer_offset: Vector2i = Vector2i(-1, -1)
 
 var chunk_manager: ChunkManager
 
 func _init():
+	randomize()
+	
 	y_sort_enabled = true
 	chunk_manager = ChunkManager.new()
+	noise_generator = FastNoiseLite.new()
+	noise_generator.seed = map_seed
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():

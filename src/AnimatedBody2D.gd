@@ -52,8 +52,6 @@ func flip_front_back(facing: ab_facing_fb):
 		return
 	var pos_arm_left = arm_left.position
 	var pos_arm_right = arm_right.position
-	var pos_leg_left = leg_left.position
-	var pos_leg_right = leg_right.position
 	
 	if facing == ab_facing_fb.front and not is_facing_fb(ab_facing_fb.front):
 		body.set_texture(body_front)
