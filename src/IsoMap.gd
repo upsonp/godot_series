@@ -56,8 +56,8 @@ func layer_local_to_map(layer: int, local_position: Vector2) -> Vector2i:
 func vector_height_map_to_local(cell_index: Vector3i) -> Vector2:
 	return map_to_local(Vector2i(cell_index.x, cell_index.y) + (layer_offset * cell_index.z))
 	
-func get_valid_cell(cell_index: Vector2i, max_layer: int = get_layers_count()) -> Vector3i:
-	for layer in range(max_layer-1, -1, -1):
+func get_valid_cell(cell_index: Vector2i, max_layer: int = get_layers_count()-1) -> Vector3i:
+	for layer in range(max_layer, -1, -1):
 		var cell_test: Vector2i = cell_index + (layer_offset * layer)
 		if get_cell_source_id(layer, cell_test) != -1:
 			return Vector3i(cell_index.x, cell_index.y, layer)

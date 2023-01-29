@@ -47,7 +47,7 @@ func _physics_process(delta):
 	if direction != Vector2i.ZERO and target_position == Vector2.ZERO:
 		var cur_cell = map.layer_local_to_map(z_index-1, position)
 		var new_cell = cur_cell + direction
-		var valid_cell: Vector3i = map.get_valid_cell(new_cell, z_index + 1)
+		var valid_cell: Vector3i = map.get_valid_cell(new_cell, z_index)
 		if valid_cell.z != -1:
 			if valid_cell.z == z_index - 1:
 				target_position = map.vector_height_map_to_local(valid_cell) + map.tile_offset
