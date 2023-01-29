@@ -16,6 +16,8 @@ var current_direction: Vector2i = Vector2i.ZERO
 
 var jumping: bool = false
 
+signal move_complete
+
 func _init():
 	y_sort_enabled = true
 
@@ -81,6 +83,7 @@ func _physics_process(delta):
 				target_height = -1
 			target_position = Vector2.ZERO
 			current_direction = Vector2.ZERO
+			emit_signal("move_complete")
 	elif body.current_state != AnimatedBody2d.ab_state.idling:
 		body.rest(delta)
 			
