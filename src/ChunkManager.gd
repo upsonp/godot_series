@@ -16,12 +16,12 @@ var null_chunk: Array[TileMapPattern]
 
 var visible_chunk_vectors: Array[Vector2i]
 
-func init(map: IsoMap) -> void:
-	self.map = map
-	self.chunk_size = map.chunk_size
-	self.num_of_visible_chunks = map.num_of_visible_chunks
-	self.num_of_cache_chunks = map.num_of_cache_chunks
-	self.chunk_height = map.get_layers_count()
+func init(init_map: IsoMap) -> void:
+	self.map = init_map
+	self.chunk_size = init_map.chunk_size
+	self.num_of_visible_chunks = init_map.num_of_visible_chunks
+	self.num_of_cache_chunks = init_map.num_of_cache_chunks
+	self.chunk_height = init_map.get_layers_count()
 	
 	var visible_chunk_offset = floor(num_of_visible_chunks * 0.5)
 	for x in range(num_of_visible_chunks):
@@ -52,10 +52,9 @@ func update_chunks(chunk_index: Vector2i = Vector2i.ZERO):
 	# draw chunks
 	for chunk_key in visible_chunk_keys:
 		if chunk_key not in chunk_map.keys():
-			chunk_map[chunk_key] = get_chunk_func(chunk_key).call()
+			chunk_map[chunk_key] = noise_chunk(flat_chunk(), chunk_key)
 		
 		if chunk_key not in cached_patterens.keys():
-			print("making new TileMapPattern: ", chunk_key)
 			cached_patterens[chunk_key] = construct_tile_map_pattern(chunk_map[chunk_key])
 			
 		map.draw_chunk(cached_patterens[chunk_key], chunk_key)
@@ -91,7 +90,6 @@ func get_null_chunk() -> Array[TileMapPattern]:
 		return null_chunk
 	
 	var layer_size: Vector2i = Vector2i(chunk_size, chunk_size)
-	var cell_offset: Vector2i = Vector2i.ZERO
 	var tile_map_pattern: TileMapPattern = TileMapPattern.new()
 	
 	tile_map_pattern.set_size(layer_size)
@@ -104,9 +102,9 @@ func get_null_chunk() -> Array[TileMapPattern]:
 	chunk.fill(tile_map_pattern)
 	
 	return chunk
-	
-func flat_chunk() -> Array[Array]:
-	var chunk: Array = Array()
+
+func flat_chunk(_chunk_data: Array = Array(), _chunk_index: Vector2i = Vector2i.ZERO) -> Array[Array]:
+	var chunk: Array = _chunk_data
 	chunk.resize(chunk_size)
 	
 	for x in range(chunk_size):
@@ -116,9 +114,19 @@ func flat_chunk() -> Array[Array]:
 	
 	return chunk
 	
-func special_chunk() -> Array[Array]:
+func noise_chunk(_chunk_data: Array, _chunk_index: Vector2i) -> Array[Array]:
+	var chunk_offset = _chunk_index * chunk_size
+	for x in range(len(_chunk_data)):
+		for y in range(len(_chunk_data)):
+			var noise = map.noise_generator.get_noise_2d(x+chunk_offset.x, y+chunk_offset.y)
+			noise = (noise + 1) * 0.5 * chunk_height
+			_chunk_data[x][y] = noise
+			
+	return _chunk_data
+	
+func special_chunk(_chunk_data: Array, _chunk_index: Vector2i) -> Array[Array]:
 	print("making chunk")
-	var chunk: Array[Array] = flat_chunk()
+	var chunk: Array[Array] = flat_chunk(_chunk_data, _chunk_index)
 	
 	var middle_x = chunk_size * 0.5
 	var middle_y = chunk_size * 0.5

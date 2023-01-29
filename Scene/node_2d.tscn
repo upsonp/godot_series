@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://qvqtdu5s8igs"]
+[gd_scene load_steps=8 format=3 uid="uid://qvqtdu5s8igs"]
 
 [ext_resource type="Texture2D" uid="uid://by6utfusdxmc0" path="res://assets/grass_tile_001.png" id="1_26f80"]
+[ext_resource type="Script" path="res://src/game.gd" id="1_uunb1"]
 [ext_resource type="Script" path="res://src/IsoMap.gd" id="2_q6bup"]
 [ext_resource type="Script" path="res://src/IsoPlayer.gd" id="3_jy4sa"]
 [ext_resource type="PackedScene" uid="uid://dld4p44jmgnqe" path="res://Scene/animated_shape_2d.tscn" id="4_t312q"]
@@ -17,12 +18,16 @@ tile_size = Vector2i(32, 16)
 sources/0 = SubResource("TileSetAtlasSource_kqobp")
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_uunb1")
 
 [node name="IsoMap" type="TileMap" parent="."]
+y_sort_enabled = true
 tile_set = SubResource("TileSet_6k03i")
 format = 2
+layer_0/y_sort_enabled = true
 script = ExtResource("2_q6bup")
-num_of_cache_chunks = 3
+chunk_size = 16
+num_of_cache_chunks = 50
 
 [node name="Player" type="CharacterBody2D" parent="IsoMap"]
 script = ExtResource("3_jy4sa")
