@@ -15,6 +15,11 @@ _global_script_classes=[{
 "path": "res://src/AnimatedBody2D.gd"
 }, {
 "base": "Node",
+"class": &"BaseState",
+"language": &"GDScript",
+"path": "res://src/base_state.gd"
+}, {
+"base": "Node",
 "class": &"ChunkManager",
 "language": &"GDScript",
 "path": "res://src/ChunkManager.gd"
@@ -23,17 +28,30 @@ _global_script_classes=[{
 "class": &"IsoMap",
 "language": &"GDScript",
 "path": "res://src/IsoMap.gd"
+}, {
+"base": "CharacterBody2D",
+"class": &"IsoPlayer",
+"language": &"GDScript",
+"path": "res://src/IsoPlayer.gd"
+}, {
+"base": "Node",
+"class": &"StateManager",
+"language": &"GDScript",
+"path": "res://src/state_manager.gd"
 }]
 _global_script_class_icons={
 "AnimatedBody2d": "",
+"BaseState": "",
 "ChunkManager": "",
-"IsoMap": ""
+"IsoMap": "",
+"IsoPlayer": "",
+"StateManager": ""
 }
 
 [application]
 
 config/name="Godot_Series"
-run/main_scene="res://Scene/node_2d.tscn"
+run/main_scene="res://Scene/game.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
 
