@@ -13,8 +13,6 @@ class_name IsoMap
 @export var in_active_color: Color = Color(0.85, 0.85, 0.85)
 @export var invisible_color: Color = Color(0.1, 0.1, 0.1, 0.3)
 
-@onready var player: CharacterBody2D = $Player
-
 var noise_generator: FastNoiseLite
 
 var tile_offset: Vector2 = Vector2(0, -float(tile_set.tile_size.y) * 0.5)
@@ -40,14 +38,6 @@ func _ready():
 
 	chunk_manager.init(self)
 	chunk_manager.update_chunks()
-
-	var chunk_index = Vector2(chunk_size * 0.5, chunk_size * 0.5)
-	var valid: Vector3i = get_valid_cell(chunk_index)
-	var player_position = vector_height_map_to_local(valid)  + tile_offset
-	player.set_location(player_position, valid.z + 1)
-	set_active_layer(valid.z)
-
-	player.connect("move_complete", _on_move_complete)
 	
 func set_active_layer(layer: int):
 	for ilayer in range(get_layers_count()-1, -1, -1):
@@ -77,7 +67,8 @@ func draw_chunk(chunk: Array[TileMapPattern], chunk_index: Vector2i):
 	for z in range(len(chunk)):
 		set_pattern(z, chunk_offset + (layer_offset * z), chunk[z])
 	
-func _on_move_complete():
-	var cell_index: Vector2 = local_to_map(player.position - tile_offset)
+func request_chunk_update(current_position: Vector2, active_layer: int):
+	var cell_index: Vector2 = local_to_map(current_position - tile_offset)
 	var chunk: Vector2i = floor(cell_index / chunk_size)
 	chunk_manager.update_chunks(chunk)
+	set_active_layer(active_layer)
