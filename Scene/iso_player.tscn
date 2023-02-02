@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2m8xq07vlg4l"]
+
+[ext_resource type="Script" path="res://src/IsoPlayer.gd" id="1_e42k2"]
+[ext_resource type="PackedScene" uid="uid://ba2s1hkfpq6qo" path="res://Scene/animated_shape_2d.tscn" id="2_c0rw2"]
+
+[node name="IsoPlayer" type="CharacterBody2D"]
+script = ExtResource("1_e42k2")
+
+[node name="Body" parent="." instance=ExtResource("2_c0rw2")]
+scale = Vector2(0.75, 0.75)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true

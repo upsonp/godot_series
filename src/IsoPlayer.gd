@@ -87,5 +87,5 @@ func _physics_process(delta):
 			emit_signal("move_complete", position, z_index-1)
 	elif body.current_state != AnimatedBody2d.ab_state.idling:
 		body.rest(delta)
-			
+	
 	move_and_slide()

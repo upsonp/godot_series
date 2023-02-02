@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dld4p44jmgnqe"]
+[gd_scene load_steps=6 format=3 uid="uid://ba2s1hkfpq6qo"]
 
 [ext_resource type="Script" path="res://src/AnimatedBody2D.gd" id="1_p5481"]
 [ext_resource type="Texture2D" uid="uid://bvwk7qsax36if" path="res://assets/alice_arm.png" id="2_bev8j"]

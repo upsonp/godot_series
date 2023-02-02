@@ -15,11 +15,6 @@ _global_script_classes=[{
 "path": "res://src/AnimatedBody2D.gd"
 }, {
 "base": "Node",
-"class": &"BaseState",
-"language": &"GDScript",
-"path": "res://src/base_state.gd"
-}, {
-"base": "Node",
 "class": &"ChunkManager",
 "language": &"GDScript",
 "path": "res://src/ChunkManager.gd"
@@ -33,19 +28,12 @@ _global_script_classes=[{
 "class": &"IsoPlayer",
 "language": &"GDScript",
 "path": "res://src/IsoPlayer.gd"
-}, {
-"base": "Node",
-"class": &"StateManager",
-"language": &"GDScript",
-"path": "res://src/state_manager.gd"
 }]
 _global_script_class_icons={
 "AnimatedBody2d": "",
-"BaseState": "",
 "ChunkManager": "",
 "IsoMap": "",
-"IsoPlayer": "",
-"StateManager": ""
+"IsoPlayer": ""
 }
 
 [application]
